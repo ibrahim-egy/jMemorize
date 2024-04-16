@@ -1,4 +1,4 @@
-/*
+/* Amr
  * jMemorize - Learning made easy (and fun) - A Leitner flashcards tool
  * Copyright(C) 2004-2008 Riad Djemili and contributors
  * 
