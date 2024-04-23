@@ -1,7 +1,7 @@
 /*
  * jMemorize - Learning made easy (and fun) - A Leitner flashcards tool
  * Copyright(C) 2004-2008 Riad Djemili and contributors
- *
+ * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 1, or (at your option)
@@ -52,34 +52,34 @@ import jmemorize.util.RecentItems;
 
 /**
  * The main class of the application.
- *
+ * 
  * @author djemili
  */
 public class Main implements LearnSessionProvider,
-        LessonProvider, CategoryObserver
+    LessonProvider, CategoryObserver
 {
     public interface ProgramEndObserver
     {
         /**
-         * This method is notified when the program ends.
+         * This method is notified when the program ends. 
          */
         public void onProgramEnd();
     }
-
+    
     protected static final Properties      PROPERTIES              = new Properties();
-    public static final Preferences     USER_PREFS              =
-            Preferences.userRoot().node("de/riad/jmemorize");          //$NON-NLS-1$
+    public static final Preferences     USER_PREFS              = 
+        Preferences.userRoot().node("de/riad/jmemorize");          //$NON-NLS-1$
 
     private static final String PROPERTIES_PATH = System.getProperty("custom.properties.path", "/resource/jMemorize.properties"); //$NON-NLS-1$
 
-    public static final File            STATS_FILE               =
-            new File(System.getProperty("user.home")+"/.jmemorize-stats.xml"); //$NON-NLS-1$ //$NON-NLS-2$
+    public static final File            STATS_FILE               = 
+        new File(System.getProperty("user.home")+"/.jmemorize-stats.xml"); //$NON-NLS-1$ //$NON-NLS-2$
 
     private RecentItems                 mRecentFiles           =
-            new RecentItems(5, USER_PREFS.node("recent.files"));        //$NON-NLS-1$
+        new RecentItems(5, USER_PREFS.node("recent.files"));        //$NON-NLS-1$
 
     private static Main                 mInstance;
-
+    
     private MainFrame                   mFrame;
     private Lesson                      mLesson;
     private LearnSettings               mLearnSettings;
@@ -88,19 +88,16 @@ public class Main implements LearnSessionProvider,
 
     // observers
     private List<LessonObserver>        mLessonObservers       =
-            new LinkedList<>();
+        new LinkedList<>();
     private List<LearnSessionObserver>  mLearnSessionObservers =
-            new LinkedList<>();
+        new LinkedList<>();
     private List<ProgramEndObserver>    mProgramEndObservers   =
-            new LinkedList<>();
-
+        new LinkedList<>();
+    
     // simple logging support
     private static final Logger     logger = Logger.getLogger("jmemorize");
     private static Throwable        mLastLoggedThrowable;
     
-
-
-
     /**
      * @return the singleton instance of Main.
      */
@@ -110,20 +107,20 @@ public class Main implements LearnSessionProvider,
         {
             mInstance = new Main();
         }
-
+        
         return mInstance;
     }
-
+    
     public static Date getNow()
     {
         return new Date();
     }
-
+    
     public static Date getTomorrow()
     {
         return new Date(new Date().getTime() + Card.ONE_DAY);
     }
-
+    
     /* (non-Javadoc)
      * Declared in jmemorize.core.LessonProvider
      */
@@ -140,13 +137,11 @@ public class Main implements LearnSessionProvider,
     {
         Lesson oldLesson = mLesson;
         mLesson = lesson;
-
+        
         if (oldLesson != null)
         {
             fireLessonClosed(oldLesson);
         }
-
-
 
         fireLessonLoaded(mLesson);
     }
@@ -159,16 +154,16 @@ public class Main implements LearnSessionProvider,
         try
         {
             ImageRepository.getInstance().clear();
-
+            
             Lesson lesson = new Lesson(false);
             XmlBuilder.loadFromXMLFile(file, lesson);
             lesson.setFile(file);
             lesson.setCanSave(false);
             mRecentFiles.push(file.getAbsolutePath());
-
+            
             setLesson(lesson);
-            startExpirationTimer(); 
-        }
+            //startExpirationTimer(); TODO expiration timer
+        } 
         catch (Exception e)
         {
             mRecentFiles.remove(file.getAbsolutePath());
@@ -176,11 +171,7 @@ public class Main implements LearnSessionProvider,
             throw new IOException(e.getMessage());
         }
     }
-
-    private void startExpirationTimer() {
-        System.out.println("Timer started");
-    }
-
+    
     /* (non-Javadoc)
      * Declared in jmemorize.core.LessonProvider
      */
@@ -204,7 +195,7 @@ public class Main implements LearnSessionProvider,
         }
     }
 
-
+    
     /* (non-Javadoc)
      * Declared in jmemorize.core.LessonProvider
      */
@@ -236,17 +227,17 @@ public class Main implements LearnSessionProvider,
     {
         mLessonObservers.remove(observer);
     }
-
+    
     /**
      * Adds a ProgramEndObserver that will be fired when this program closes.
-     *
+     * 
      * @param observer
      */
     public void addProgramEndObserver(ProgramEndObserver observer)
     {
         mProgramEndObservers.add(observer);
     }
-
+    
     /**
      * @see #addProgramEndObserver(jmemorize.core.Main.ProgramEndObserver)
      */
@@ -254,7 +245,7 @@ public class Main implements LearnSessionProvider,
     {
         mProgramEndObservers.remove(observer);
     }
-
+    
     /**
      * Notifies all program end observers and exists the application.
      */
@@ -264,26 +255,26 @@ public class Main implements LearnSessionProvider,
         {
             observer.onProgramEnd();
         }
-
+        
         System.exit(0);
     }
 
     /* (non-Javadoc)
      * Declared in jmemorize.core.LearnSessionProvider
      */
-    public void startLearnSession(LearnSettings settings, List<Card> selectedCards,
-                                  Category category,boolean learnUnlearned, boolean learnExpired)
+    public void startLearnSession(LearnSettings settings, List<Card> selectedCards, 
+        Category category,boolean learnUnlearned, boolean learnExpired) 
     {
-        LearnSession session = new DefaultLearnSession(category, settings,
-                selectedCards, learnUnlearned, learnExpired, this);
-
+        LearnSession session = new DefaultLearnSession(category, settings, 
+            selectedCards, learnUnlearned, learnExpired, this);
+        
         mRunningSessions++;
-
+        
         for (LearnSessionObserver observer : mLearnSessionObservers)
         {
             observer.sessionStarted(session);
         }
-
+        
         // this needs to be called after notifying the observers so that they
         // don't miss the first card
         session.startLearning();
@@ -295,19 +286,19 @@ public class Main implements LearnSessionProvider,
     public void sessionEnded(LearnSession session)
     {
         mRunningSessions--;
-
+        
         if (session.isRelevant())
         {
             LearnHistory history = mLesson.getLearnHistory();
             history.addSummary(
-                    session.getStart(),
-                    session.getEnd(),
-                    session.getPassedCards().size(),
-                    session.getFailedCards().size(),
-                    session.getSkippedCards().size(),
-                    session.getRelearnedCards().size());
+                session.getStart(), 
+                session.getEnd(), 
+                session.getPassedCards().size(), 
+                session.getFailedCards().size(),
+                session.getSkippedCards().size(),
+                session.getRelearnedCards().size());
         }
-
+        
         for (LearnSessionObserver observer : mLearnSessionObservers)
         {
             observer.sessionEnded(session);
@@ -341,7 +332,7 @@ public class Main implements LearnSessionProvider,
     /**
      * @return the main frame.
      */
-    public MainFrame getFrame()
+    public MainFrame getFrame() 
     {
         return mFrame;
     }
@@ -353,7 +344,7 @@ public class Main implements LearnSessionProvider,
     {
         return mLearnSettings;
     }
-
+    
     /**
      * @return the statistics for jMemorize.
      */
@@ -381,17 +372,17 @@ public class Main implements LearnSessionProvider,
     public Main()
     {
         InputStream propertyStream = null;
-
+        
         try
         {
-            //Increase Limit Important
+            // TODO - make this adjustable
             // Note that the limit might not be enough for finer.
-            Handler fh = new FileHandler("%t/jmemorize%g.log", 10000000, 3);
-            fh.setLevel(Level.WARNING);
+            Handler fh = new FileHandler("%t/jmemorize%g.log", 10000, 3);
+            fh.setLevel(Level.WARNING);            
             fh.setFormatter(new SimpleFormatter());
             logger.addHandler(fh);
             URL resource = getClass().getResource(PROPERTIES_PATH);
-
+            
             if (resource != null)
             {
                 propertyStream = resource.openStream();
@@ -417,7 +408,7 @@ public class Main implements LearnSessionProvider,
             }
         }
     }
-
+    
     /**
      * @return <code>true</code> if this is the devel version running.
      * <code>false</code> if it is the release version. This can be used for
@@ -428,15 +419,15 @@ public class Main implements LearnSessionProvider,
         String property = PROPERTIES.getProperty("project.release"); //$NON-NLS-1$
         return !Boolean.parseBoolean(property);
     }
-
+    
     /*
      * Logging utilities
      */
-    public static Logger getLogger()
+    public static Logger getLogger() 
     {
         return logger;
     }
-
+    
     // note that we cache the throwable so that we only log it the first time.
     // This allows us to put a catch all call to this function in ErrorDialog.
     // Ideally, exceptions should be logged where they are first caught, because
@@ -446,6 +437,7 @@ public class Main implements LearnSessionProvider,
             mLastLoggedThrowable = t;
             logger.severe(msg);
 
+            // TODO, consider writing these to the log file only once?
             String java    = System.getProperty("java.version");
             String os      = System.getProperty("os.name");
             String version = Main.PROPERTIES.getProperty("project.version");
@@ -462,7 +454,7 @@ public class Main implements LearnSessionProvider,
         }
     }
 
-    public static void clearLastThrowable()
+    public static void clearLastThrowable() 
     {
         mLastLoggedThrowable = null;
     }
@@ -480,11 +472,11 @@ public class Main implements LearnSessionProvider,
     {
         createNewLesson();
         startStats();
-
+        
         mFrame = new MainFrame();
         mLearnSettings = Settings.loadStrategy(mFrame);
         mFrame.setVisible(true);
-
+        
         if (file != null)
         {
             mFrame.loadLesson(file);
@@ -495,21 +487,21 @@ public class Main implements LearnSessionProvider,
     {
         mGlobalLearnHistory = new LearnHistory(STATS_FILE);
     }
-
+    
     private void fireLessonLoaded(Lesson lesson)
     {
         lesson.getRootCategory().addObserver(this);
-
+        
         for (LessonObserver observer : mLessonObservers)
         {
             observer.lessonLoaded(lesson);
         }
     }
-
+    
     private void fireLessonClosed(Lesson lesson)
     {
         lesson.getRootCategory().removeObserver(this);
-
+        
         for (LessonObserver observer : mLessonObservers)
         {
             observer.lessonClosed(lesson);
@@ -533,6 +525,6 @@ public class Main implements LearnSessionProvider,
     public static void main(String[] args)
     {
         File file = args.length >= 1 ? new File(args[0]) : null;
-        Main.getInstance().run(file);
+        Main.getInstance().run(file);        
     }
 }
