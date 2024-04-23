@@ -154,9 +154,8 @@ public class FormattedText {
     {
         return mUnformattedText;
     }
-    
-    // TODO rename to toStyledDocument
-    public StyledDocument getDocument()
+
+    public StyledDocument toStyledDocument()
     {
         DefaultStyledDocument doc = new DefaultStyledDocument();
         doc.setCharacterAttributes(0, doc.getLength() + 1, // HACK 
