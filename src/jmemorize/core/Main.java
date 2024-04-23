@@ -61,7 +61,7 @@ public class Main implements LearnSessionProvider,
     public interface ProgramEndObserver
     {
         /**
-         * This method is notified when the program ends.
+         * This method is notified when the program ends. 
          */
         public void onProgramEnd();
     }
@@ -97,9 +97,6 @@ public class Main implements LearnSessionProvider,
     // simple logging support
     private static final Logger     logger = Logger.getLogger("jmemorize");
     private static Throwable        mLastLoggedThrowable;
-    
-
-
 
     /**
      * @return the singleton instance of Main.
@@ -147,8 +144,6 @@ public class Main implements LearnSessionProvider,
             fireLessonClosed(oldLesson);
         }
 
-
-
         fireLessonLoaded(mLesson);
     }
 
@@ -161,6 +156,7 @@ public class Main implements LearnSessionProvider,
         {
             ImageRepository im = new ImageRepository();
             im.clear();
+
             Lesson lesson = new Lesson(false);
             XmlBuilder.loadFromXMLFile(file, lesson);
             lesson.setFile(file);
@@ -168,7 +164,7 @@ public class Main implements LearnSessionProvider,
             mRecentFiles.push(file.getAbsolutePath());
 
             setLesson(lesson);
-            startExpirationTimer(); 
+            //startExpirationTimer(); TODO expiration timer
         }
         catch (Exception e)
         {
@@ -177,12 +173,6 @@ public class Main implements LearnSessionProvider,
             throw new IOException(e.getMessage());
         }
     }
-
-    private void startExpirationTimer() {
-        Logger lg = Logger.getLogger("YourLoggerName");
-        lg.info("Timer started");
-    }
-
 
     /* (non-Javadoc)
      * Declared in jmemorize.core.LessonProvider
@@ -387,9 +377,9 @@ public class Main implements LearnSessionProvider,
 
         try
         {
-            //Increase Limit Important
+            // TODO - make this adjustable
             // Note that the limit might not be enough for finer.
-            Handler fh = new FileHandler("%t/jmemorize%g.log", 10000000, 3);
+            Handler fh = new FileHandler("%t/jmemorize%g.log", 10000, 3);
             fh.setLevel(Level.WARNING);
             fh.setFormatter(new SimpleFormatter());
             logger.addHandler(fh);
@@ -449,6 +439,7 @@ public class Main implements LearnSessionProvider,
             mLastLoggedThrowable = t;
             logger.severe(msg);
 
+            // TODO, consider writing these to the log file only once?
             String java    = System.getProperty("java.version");
             String os      = System.getProperty("os.name");
             String version = Main.PROPERTIES.getProperty("project.version");
