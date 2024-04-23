@@ -129,7 +129,8 @@ public class Main implements LearnSessionProvider,
      */
     public void createNewLesson()
     {
-        ImageRepository.getInstance().clear();
+        ImageRepository im = new ImageRepository();
+        im.clear();
         setLesson(new Lesson(false));
     }
 
@@ -158,8 +159,8 @@ public class Main implements LearnSessionProvider,
     {
         try
         {
-            ImageRepository.getInstance().clear();
-
+            ImageRepository im = new ImageRepository();
+            im.clear();
             Lesson lesson = new Lesson(false);
             XmlBuilder.loadFromXMLFile(file, lesson);
             lesson.setFile(file);
@@ -178,8 +179,10 @@ public class Main implements LearnSessionProvider,
     }
 
     private void startExpirationTimer() {
-        System.out.println("Timer started");
+        Logger lg = Logger.getLogger("YourLoggerName");
+        lg.info("Timer started");
     }
+
 
     /* (non-Javadoc)
      * Declared in jmemorize.core.LessonProvider

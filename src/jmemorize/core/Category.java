@@ -233,7 +233,7 @@ public class Category implements Events
 
         for (Iterator<Card> it = expiredCards.iterator(); it.hasNext();)
         {
-            Card card = (Card)it.next();
+            Card card = it.next();
             if (!card.isExpired())
             {
                 it.remove();
@@ -253,7 +253,7 @@ public class Category implements Events
 
         for (Iterator<Card> it = learnedCards.iterator(); it.hasNext();)
         {
-            Card card = (Card)it.next();
+            Card card = it.next();
             if (!card.isLearned())
             {
                 it.remove();

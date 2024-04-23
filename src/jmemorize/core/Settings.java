@@ -229,7 +229,7 @@ public class Settings
      * @return A newly created strategy that got instantiated with all the
      * stored strategy data or with default values.
      */
-    public static LearnSettings loadStrategy()
+    public static LearnSettings loadStrategy(MainFrame mFrame)
     {
         LearnSettings settings = new LearnSettings();
         
