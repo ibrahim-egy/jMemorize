@@ -22,12 +22,4 @@ package jmemorize.core;
  * @see CategoryObserver
  * @author djemili
  */
-public interface Events // TODO move to category class
-{
-    public static final int ADDED_EVENT   = 0;
-    public static final int REMOVED_EVENT = 1;
-    public static final int MOVED_EVENT   = 2;
-    public static final int DECK_EVENT    = 3;
-    public static final int EDITED_EVENT  = 4;
-    public static final int EXPIRED_EVENT = 5;
-}
+
