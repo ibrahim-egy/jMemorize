@@ -24,8 +24,18 @@ import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
-public class Category implements Events 
+
+public class Category
 {
+    public enum EventsType {
+        ADDED_EVENT,
+        REMOVED_EVENT,
+      MOVED_EVENT,
+       DECK_EVENT,
+        EDITED_EVENT,
+        EXPIRED_EVENT
+    }
+
 
     private List<CategoryObserver> mObservers = new CopyOnWriteArrayList<>();
 
@@ -74,7 +84,7 @@ public class Category implements Events
     {
         addCardInternal(card, level);
 
-        fireCardEvent(ADDED_EVENT, card, card.getCategory(), level);
+        fireCardEvent(EventsType.ADDED_EVENT.ordinal(), card, card.getCategory(), level);
     }
 
     /**
@@ -86,7 +96,7 @@ public class Category implements Events
         Category category = card.getCategory();
         removeCardInternal(card);
 
-        fireCardEvent(REMOVED_EVENT, card, category, level);
+        fireCardEvent(EventsType.REMOVED_EVENT.ordinal(), card, category, level);
     }
 
     /**
@@ -102,8 +112,8 @@ public class Category implements Events
         category.removeCardInternal(card);
         newCategory.addCardInternal(card, level);
 
-        category.fireCardEvent(MOVED_EVENT, card, category, level);
-        newCategory.fireCardEvent(MOVED_EVENT, card, category, level);
+        category.fireCardEvent(EventsType.MOVED_EVENT.ordinal(), card, category, level);
+        newCategory.fireCardEvent(EventsType.MOVED_EVENT.ordinal(), card, category, level);
     }
 
     /**
@@ -140,7 +150,7 @@ public class Category implements Events
     {
         card.setDateTouched(new Date());
 
-        card.getCategory().fireCardEvent(DECK_EVENT, card, card.getCategory(), card.getLevel());
+        card.getCategory().fireCardEvent(EventsType.DECK_EVENT.ordinal(), card, card.getCategory(), card.getLevel());
     }
 
     /**
@@ -233,7 +243,7 @@ public class Category implements Events
 
         for (Iterator<Card> it = expiredCards.iterator(); it.hasNext();)
         {
-            Card card = it.next();
+            Card card = (Card)it.next();
             if (!card.isExpired())
             {
                 it.remove();
@@ -253,7 +263,7 @@ public class Category implements Events
 
         for (Iterator<Card> it = learnedCards.iterator(); it.hasNext();)
         {
-            Card card = it.next();
+            Card card = (Card)it.next();
             if (!card.isLearned())
             {
                 it.remove();
@@ -352,11 +362,7 @@ public class Category implements Events
         return mDecks.get(level);
     }
 
-    /**
-     * @return The number of decks of this category and its child categories.
-     * That means that no child categoriy can have more number of decks then
-     * its parent category.
-     */
+
     public int getNumberOfDecks()
     {
         return mDecks.size();
@@ -411,7 +417,7 @@ public class Category implements Events
 
         mChildCategories.add(position, category);
 
-        fireCategoryEvent(ADDED_EVENT, category);
+        fireCategoryEvent(EventsType.ADDED_EVENT.ordinal(), category);
 
         return category;
     }
@@ -427,7 +433,7 @@ public class Category implements Events
 
         mParent.mChildCategories.remove(this);
 
-        fireCategoryEvent(REMOVED_EVENT, this);
+        fireCategoryEvent(EventsType.REMOVED_EVENT.ordinal(), this);
         mParent = null; // have to release parent AFTER firing event
     }
 
@@ -473,7 +479,7 @@ public class Category implements Events
 
         if (!mName.equals(newName)) {
             mName = newName;
-            fireCategoryEvent(EDITED_EVENT, this);
+            fireCategoryEvent(EventsType.EDITED_EVENT.ordinal(), this);
         }
     }
 
@@ -565,7 +571,7 @@ public class Category implements Events
 
     void fireCardEvent(int type, Card card, Category category, int deck)
     {
-        if (type != EDITED_EVENT)
+        if (type != EventsType.EDITED_EVENT.ordinal())
         {
             adjustNumberOfDecks();
         }
@@ -664,7 +670,7 @@ public class Category implements Events
         // note also that new expiration date is set before adding again
         category.addCardInternal(card, newLevel);
 
-        category.fireCardEvent(DECK_EVENT, card, category, level);
+        category.fireCardEvent(EventsType.DECK_EVENT.ordinal(), card, category, level);
     }
 
     private void adjustNumberOfDecks()
