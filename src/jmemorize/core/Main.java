@@ -164,7 +164,7 @@ public class Main implements LearnSessionProvider,
             mRecentFiles.push(file.getAbsolutePath());
 
             setLesson(lesson);
-            //startExpirationTimer(); TODO expiration timer
+            startExpirationTimer(); 
         }
         catch (Exception e)
         {
@@ -172,6 +172,10 @@ public class Main implements LearnSessionProvider,
             logThrowable("Error loading lesson", e);
             throw new IOException(e.getMessage());
         }
+    }
+
+        private void startExpirationTimer() {
+        System.out.println("Timer started");
     }
 
     /* (non-Javadoc)
