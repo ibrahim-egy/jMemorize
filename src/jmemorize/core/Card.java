@@ -1,7 +1,7 @@
 /*
  * jMemorize - Learning made easy (and fun) - A Leitner flashcards tool
  * Copyright(C) 2004-2008 Riad Djemili and contributors
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 1, or (at your option)
@@ -22,14 +22,15 @@ import java.util.Date;
 import java.util.List;
 
 import jmemorize.core.CardSide.CardSideObserver;
+import jmemorize.core.Category.EventsType;
 
 /**
  * A flash card that has a front/flip side and can be learned.
- * 
+ *
  * @author djemili
  * @version $Id: Card.java 1048 2008-01-21 21:40:00Z djemili $
  */
-public class Card implements Events
+public class Card
 {
     public static final long    ONE_DAY     =(long) 1000 * 60 * 60 * 24;
     public static final boolean CLONE_DATES = Main.isDevel();
@@ -40,7 +41,7 @@ public class Card implements Events
     // content
     private CardSide mFrontSide;
     private CardSide mBackSide;
-    
+
     // dates
     private Date mDateTested;
     private Date mDateExpired;
@@ -62,12 +63,12 @@ public class Card implements Events
     {
         this(FormattedText.formatted(front), FormattedText.formatted(back));
     }
-    
-    public Card(FormattedText front, FormattedText back) 
+
+    public Card(FormattedText front, FormattedText back)
     {
         this(new Date(), front, back);
     }
-    
+
     /**
      * The card sides are given in a formatted state.
      */
@@ -75,12 +76,12 @@ public class Card implements Events
     {
         this(created, FormattedText.formatted(front), FormattedText.formatted(back));
     }
-    
+
     public Card(Date created, FormattedText front, FormattedText back)
     {
         this(created, new CardSide(front), new CardSide(back));
     }
-    
+
     public Card(Date created, CardSide frontSide, CardSide backSide)
     {
         fireCard = new FireCardHelp();
@@ -97,46 +98,46 @@ public class Card implements Events
 
     /**
      * The given card sides are assumend to be unformatted.
-     * 
+     *
      * @throws IllegalArgumentException If frontSide or backSide has no text.
      */
     public void setSides(String front, String back)
     {
         FormattedText frontSide = FormattedText.unformatted(front);
         FormattedText backSide = FormattedText.unformatted(back);
-        
+
         setSides(frontSide, backSide);
     }
-    
+
     /**
      * @throws IllegalArgumentException If front or back has no text.
      */
-    public void setSides(FormattedText front, FormattedText back) 
-        throws IllegalArgumentException
+    public void setSides(FormattedText front, FormattedText back)
+            throws IllegalArgumentException
     {
         if (front.equals(mFrontSide.getText()) &&
-            back.equals(mBackSide.getText()))
+                back.equals(mBackSide.getText()))
         {
             return;
         }
-        
+
         mFrontSide.setText(front);
         mBackSide.setText(back);
-        
+
         if (mCategory != null)
         {
             mDateModified = new Date();
             fireCard.fireEvent(Card.this);
         }
     }
-    
+
     /**
      * Get the number of times a specific card side was already learned in its
      * deck.
-     * 
+     *
      * @param frontside <code>true</code> if it should deliver the fronside
      * value, <code>false</code> if it should deliver the backside value.
-     * 
+     *
      * @return the amount of times that the specified side was learned in this
      * deck.
      */
@@ -145,10 +146,10 @@ public class Card implements Events
     /**
      * Set the number of times a specific card side was already learned in its
      * deck.
-     * 
+     *
      * @param frontside <code>true</code> if it should deliver the fronside
      * value, <code>false</code> if it should deliver the backside value.
-     * 
+     *
      * @param amount the amount of times that the specified side was learned in
      * this deck.
      */
@@ -156,7 +157,7 @@ public class Card implements Events
     /**
      * Increment the number of times a specific card side was already learned in
      * its deck by one.
-     * 
+     *
      * @param frontside <code>true</code> if it should deliver the fronside
      * value, <code>false</code> if it should deliver the backside value.
      */
@@ -181,7 +182,7 @@ public class Card implements Events
     {
         return mBackSide;
     }
-    
+
     /**
      * @return the date that this card appeared the last time in a test and was
      * either passed or failed (skip doesn't count).
@@ -223,12 +224,12 @@ public class Card implements Events
 
     public void setDateCreated(Date date)
     {
-        if (date == null) 
+        if (date == null)
             throw new NullPointerException();
-        
+
         mDateCreated = cloneDate(date);
     }
-    
+
     /**
      * @return the modification date. Is never <code>null</code>.
      */
@@ -244,8 +245,8 @@ public class Card implements Events
     {
         if (date.before(mDateCreated))
             throw new IllegalArgumentException(
-                "Modification date can't be before creation date.");
-        
+                    "Modification date can't be before creation date.");
+
         mDateModified = date;
     }
 
@@ -299,7 +300,7 @@ public class Card implements Events
     {
         mTestsTotal = 0;
         mTestsHit = 0;
-        
+
         mFrontSide.setLearnedAmount(0,Card.this);
         mBackSide.setLearnedAmount(0,Card.this);
     }
@@ -317,20 +318,20 @@ public class Card implements Events
     /**
      * A card is expired when it was learned/repeated succesfully, but its learn
      * time has expired (is in the past from current perspective).
-     * 
+     *
      * @return True if the card has expired.
      */
     public boolean isExpired()
     {
         Date now = Main.getNow();
         return mDateExpired != null &&
-            (mDateExpired.before(now) || mDateExpired.equals(now));
+                (mDateExpired.before(now) || mDateExpired.equals(now));
     }
 
     /**
-     * A card is learned when it was learned/repeated succesfully and its learn 
+     * A card is learned when it was learned/repeated succesfully and its learn
      * time hasnt expired.
-     * 
+     *
      * @return True if the card is learned.
      */
     public boolean isLearned()
@@ -341,7 +342,7 @@ public class Card implements Events
     /**
      * A card is unlearned when it wasnt succesfully repeated or never been l
      * earned at all.
-     * 
+     *
      * @return True if the card is unlearned.
      */
     public boolean isUnlearned()
@@ -397,7 +398,7 @@ public class Card implements Events
 
     /**
      * Clones the card without copying its user-dependent progress stats.
-     * 
+     *
      * This includes the following data: Fronside, Flipside, Creation date.
      * Setting the right category needs to be handled from the out side.
      */
@@ -413,7 +414,7 @@ public class Card implements Events
     {
         return "("+ mFrontSide +"/"+ mBackSide +")";
     }
-    
+
     private void attachCardSideObservers()
     {
         CardSideObserver observer = new CardSideObserver() {
@@ -434,7 +435,7 @@ public class Card implements Events
                 fireCard.fireEvent(Card.this);
             }
         };
-        
+
         mFrontSide.addObserver(observer);
         mBackSide.addObserver(observer);
     }
