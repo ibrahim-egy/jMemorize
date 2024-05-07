@@ -190,7 +190,7 @@ public class XmlBuilder
      * 
      * Don't use this method directly. Use the {@link LessonProvider} instead.
      * 
-     * @param lesson xmlFile the file that containt the XML document which
+     * @param File xmlFile the file that containt the XML document which
      * represents the lesson.
      */
     public static void loadFromXMLFile(File xmlFile, Lesson lesson) 
@@ -335,7 +335,7 @@ public class XmlBuilder
      */
     public static File writeImageRepositoryToDisk(File dir) throws IOException
     {
-        ImageRepository repository = new ImageRepository();
+        ImageRepository repository = ImageRepository.getInstance();
         
         File imgDir = new File(dir + File.separator + IMAGE_FOLDER);
         imgDir.mkdirs();
@@ -425,11 +425,11 @@ public class XmlBuilder
         }
         
         // save amount learned
-        cardTag.setAttribute(AMOUNT_LEARNED_FRONT,
-                Integer.toString(card.getFrontSide().getLearnedAmount()));
+        cardTag.setAttribute(AMOUNT_LEARNED_FRONT, 
+            Integer.toString(card.getLearnedAmount(true)));
         
-        cardTag.setAttribute(AMOUNT_LEARNED_BACK,
-                Integer.toString(card.getBackSide().getLearnedAmount()));
+        cardTag.setAttribute(AMOUNT_LEARNED_BACK, 
+            Integer.toString(card.getLearnedAmount(false)));
         
         // save stats
         cardTag.setAttribute(TESTS_TOTAL, Integer.toString(card.getTestsTotal()));
@@ -460,7 +460,7 @@ public class XmlBuilder
     private static void writeImageRepositoryToZip(ZipOutputStream zipOut) 
         throws IOException
     {
-        ImageRepository repository = new ImageRepository();
+        ImageRepository repository = ImageRepository.getInstance();
         
         for (ImageItem item : repository.getImageItems())
         {
@@ -558,9 +558,9 @@ public class XmlBuilder
         card.setDateTested(dateTested);
         card.setDateExpired(dateExpired);
         card.setDateTouched(dateTouched);
-
-        card.getFrontSide().setLearnedAmount(frontAmountLearned,card);
-        card.getBackSide().setLearnedAmount(backAmountLearned,card);
+        
+        card.setLearnedAmount(true, frontAmountLearned);
+        card.setLearnedAmount(false, backAmountLearned);
         card.incStats(testsHit, testsTotal);
         
         // load images
@@ -611,7 +611,7 @@ public class XmlBuilder
     
     private static void loadImageRepositoryFromDisk(File dir)
     {
-        ImageRepository repository = new ImageRepository();
+        ImageRepository repository = ImageRepository.getInstance();
         
         File imgDir = new File(dir.getParent() + File.separator + IMAGE_FOLDER);
         File[] files = imgDir.listFiles();
@@ -640,7 +640,7 @@ public class XmlBuilder
     private static void loadImageFromZipEntry(InputStream in, ZipEntry entry) 
         throws IOException
     {
-        ImageRepository repository = new ImageRepository();
+        ImageRepository repository = ImageRepository.getInstance();
         
         String name = entry.getName();
         if (!name.startsWith(IMAGE_FOLDER))
@@ -659,8 +659,8 @@ public class XmlBuilder
             usedImageIDs.addAll(card.getFrontSide().getImages());
             usedImageIDs.addAll(card.getBackSide().getImages());
         }
-        ImageRepository removeUnused = new ImageRepository();
-        removeUnused.retain(usedImageIDs);
+    
+        ImageRepository.getInstance().retain(usedImageIDs);
     }
 
     private static String toInteger(float num)

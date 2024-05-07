@@ -18,7 +18,6 @@
  */
 package jmemorize.core.test;
 
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -28,9 +27,6 @@ import jmemorize.core.Card;
 import jmemorize.core.Category;
 import jmemorize.core.CategoryObserver;
 import junit.framework.TestCase;
-import jmemorize.core.Category.EventsType;
-
-import static jmemorize.core.Category.EventsType.*;
 
 
 /**
@@ -238,16 +234,16 @@ public class CategoryTest extends TestCase implements CategoryObserver
         m_rootCategory.addCard(m_rootCard);
         assertEquals(1, m_events.size());
         CardEvent event = (CardEvent)m_events.get(0);
-        event.assertEvent(ADDED_EVENT.ordinal(),m_rootCard, 0, m_rootCategory);
+        event.assertEvent(ADDED_EVENT, m_rootCard, 0, m_rootCategory);
         
         m_events.clear();
         m_childCategory.addCard(m_childCard);
         assertEquals(2, m_events.size());
         event = (CardEvent)m_events.get(0);
-        event.assertEvent(ADDED_EVENT.ordinal(), m_childCard, 0, m_childCategory);
+        event.assertEvent(ADDED_EVENT, m_childCard, 0, m_childCategory);
         
         event = (CardEvent)m_events.get(1);
-        event.assertEvent(ADDED_EVENT.ordinal(), m_childCard, 0, m_childCategory);
+        event.assertEvent(ADDED_EVENT, m_childCard, 0, m_childCategory);
     }
     
     public void textGetCards()
@@ -283,17 +279,17 @@ public class CategoryTest extends TestCase implements CategoryObserver
         m_rootCategory.removeCard(m_rootCard);
         assertEquals(1, m_events.size());
         CardEvent event = (CardEvent)m_events.get(0);
-        event.assertEvent(REMOVED_EVENT.ordinal(), m_rootCard, 0, null);
+        event.assertEvent(REMOVED_EVENT, m_rootCard, 0, null);
         
         // event is fired by root and child category decks
         m_events.clear();        
         m_childCategory.removeCard(m_childCard);
         assertEquals(2, m_events.size());
         event = (CardEvent)m_events.get(0);
-        event.assertEvent(REMOVED_EVENT.ordinal(), m_childCard, 0, null);
+        event.assertEvent(REMOVED_EVENT, m_childCard, 0, null);
         
         event = (CardEvent)m_events.get(1);
-        event.assertEvent(REMOVED_EVENT.ordinal(), m_childCard, 0, null);
+        event.assertEvent(REMOVED_EVENT, m_childCard, 0, null);
     }
     
     public void testMoveCard()
@@ -314,7 +310,7 @@ public class CategoryTest extends TestCase implements CategoryObserver
         m_rootCategory.moveCard(m_rootCard, m_childCategory);
         
         CardEvent event = (CardEvent)m_events.get(0);
-        event.assertEvent(MOVED_EVENT.ordinal(), m_rootCard, 3, m_childCategory);
+        event.assertEvent(MOVED_EVENT, m_rootCard, 3, m_childCategory);
         // TODO test number of events
     }
     
@@ -327,7 +323,7 @@ public class CategoryTest extends TestCase implements CategoryObserver
         m_rootCard.setSides("test frontside", "test backside");
         assertEquals(1, m_events.size());
         CardEvent event = (CardEvent)m_events.get(0);
-        event.assertEvent(EDITED_EVENT.ordinal(), m_rootCard, 0, m_rootCategory);
+        event.assertEvent(EDITED_EVENT, m_rootCard, 0, m_rootCategory);
     }
     
     public void testRaiseCardRootCategory()

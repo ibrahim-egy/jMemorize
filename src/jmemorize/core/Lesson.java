@@ -30,11 +30,11 @@ import jmemorize.gui.Localization;
 public class Lesson implements CategoryObserver 
 {
     /** True if this lesson has been modified since last save or load process */
-    private boolean           canSave = false;
-    private File              file;
+    private boolean           m_canSave = false;
+    private File              m_file;
     
-    private Category          rootCategory;
-    private LearnHistory      learnHistory = new LearnHistory();
+    private Category          m_rootCategory;
+    private LearnHistory      m_learnHistory = new LearnHistory();
     
     public Lesson(boolean canSave)
     {
@@ -55,19 +55,20 @@ public class Lesson implements CategoryObserver
      */
     public File getFile()
     {
-        return file;
+        return m_file;
     }
     
     /**
      * @param file The file to set.
      */
-    public void setFile(File file) {
-        this.file = file; // Assign the parameter to the class field
+    public void setFile(File file)
+    {
+        m_file = file;
     }
     
     public LearnHistory getLearnHistory()
     {
-        return learnHistory;
+        return m_learnHistory;
     }
     
     /**
@@ -75,7 +76,7 @@ public class Lesson implements CategoryObserver
      */
     public boolean canSave()
     {
-        return canSave;
+        return m_canSave;
     }
     
     /**
@@ -83,7 +84,7 @@ public class Lesson implements CategoryObserver
      */
     public Category getRootCategory()
     {
-        return rootCategory;
+        return m_rootCategory;
     }
     
     /*
@@ -112,7 +113,7 @@ public class Lesson implements CategoryObserver
      */
     public Lesson cloneWithoutProgress()
     {
-        return new Lesson(rootCategory.cloneWithoutProgress(), true);
+        return new Lesson(m_rootCategory.cloneWithoutProgress(), true);
     }
     
     /* (non-Javadoc)
@@ -145,18 +146,12 @@ public class Lesson implements CategoryObserver
     {
         return "Lesson("+getFile()+")";
     }
-
-    private void setCanSave(boolean canSave)
+    
+    public void setCanSave(boolean canSave) // TODO make private
     {
-        this.canSave = canSave;
+        m_canSave = canSave;
     }
-
-    public void pierre (boolean canSave)
-    {
-        Lesson lesson = new Lesson(false);
-
-        lesson.setCanSave( canSave );
-    }
+    
     /**
      * Sets a new root category and add this lesson as it's obvserver.
      * RootCategory must be <code>null</code> prior to calling this method,
@@ -164,11 +159,12 @@ public class Lesson implements CategoryObserver
      * 
      * @param rootCategory The new root. Can't be <code>null</code>.
      */
-    private void setRootCategory(Category rootCategory) {
-        assert rootCategory != null; // Ensure rootCategory is not null
-
-        this.rootCategory = rootCategory; // Assign the parameter to the class field
-        this.rootCategory.addObserver(this); // Register this Lesson as an observer
+    private void setRootCategory(Category rootCategory)
+    {
+        assert m_rootCategory == null;
+        
+        m_rootCategory = rootCategory;
+        m_rootCategory.addObserver(this);
     }
 }
 

@@ -334,8 +334,7 @@ public class GeneralTransferHandler extends TransferHandler
                 List<Card> cards = (List<Card>)t.getTransferData(CARDS_FLAVOR);
                 for (Card card : cards)
                 {
-                    targetCategory.addCard(new Card(card), card.getLevel());
-
+                    targetCategory.addCard((Card)card.clone(), card.getLevel());
                 }
     
                 return true;
@@ -457,7 +456,7 @@ public class GeneralTransferHandler extends TransferHandler
         {
             for (Card card : original.getLocalCards(i))
             {
-                copy.addCard(new Card(card), i);
+                copy.addCard((Card)card.clone(), i);
             }
         }
         

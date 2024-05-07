@@ -18,7 +18,6 @@
  */
 package jmemorize.core;
 
-import java.util.Collections;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,55 +41,56 @@ public class ImageRepository
 {
     private static final int MAX_CACHED_IMAGES = 10;
 
-    public static final String IMG_ID_PREFIX = "::";
+    public static final String IMG_ID_PREFIX = "::";    
+    
+    private static ImageRepository m_instance;
 
-    private Map<String, ImageItem> imageMap = new HashMap<>();
-    private LinkedList<ImageIcon> imageCache = new LinkedList<>();
-
+    private Map<String, ImageItem> m_imageMap    = new HashMap<String, ImageItem>();
+    private LinkedList<ImageIcon>  m_imageCache  = new LinkedList<ImageIcon>();
 
     private static final Pattern   FILE_PATTERN = Pattern.compile("(.*)_(\\d+)");
-
+    
     public class ImageItem
     {
-        private String    sourceFile;
-        private byte[]    bytes;
-        private String    id;
-
-        public ImageItem(InputStream in, String filename)
-                throws IOException
+        private String    m_sourceFile;
+        private byte[]    m_bytes;
+        private String    m_id;  
+ 
+        public ImageItem(InputStream in, String filename) 
+            throws IOException
         {
-            sourceFile = filename;
-            id = createId(filename);
-            bytes = readFile(in);
+            m_sourceFile = filename;
+            m_id = createId(filename);
+            m_bytes = readFile(in);
         }
-
+        
         public ImageIcon getImage()
         {
-            ImageIcon image = new ImageIcon(bytes);
-            image.setDescription(IMG_ID_PREFIX + id);
-
+            ImageIcon image = new ImageIcon(m_bytes);
+            image.setDescription(IMG_ID_PREFIX + m_id);
+            
             return image;
         }
 
         public String getId()
         {
-            return id;
+            return m_id;
         }
-
+        
         public String getFile()
         {
-            return sourceFile;
+            return m_sourceFile;
         }
-
+        
         public byte[] getBytes()
         {
-            return bytes;
+            return m_bytes;
         }
-
+        
         @Override
         public String toString()
         {
-            return id;
+            return m_id;
         }
 
         private String createId(String filename)
@@ -98,111 +98,140 @@ public class ImageRepository
             int dotPos = filename.lastIndexOf(".");
             String extension = filename.substring(dotPos);
             String purename = filename.substring(0, dotPos);
-
+            
             while (getKeys().contains(purename + extension))
             {
                 int num = 0;
-
+                
                 Matcher m = FILE_PATTERN.matcher(purename);
                 if (m.matches() && m.groupCount() == 2)
                 {
                     num = Integer.valueOf(m.group(2));
                     num++;
-
+                    
                     purename = m.group(1);
                 }
 
-                // Use StringBuilder for efficient string concatenation
-                StringBuilder sb = new StringBuilder();
-                sb.append(purename).append("_").append(num);
-                purename = sb.toString();
+                purename = purename + "_" + num;
             }
-
+            
             return purename + extension;
         }
+        
         private byte[] readFile(InputStream in) throws IOException
         {
             ByteArrayOutputStream bytesOut = new ByteArrayOutputStream();
-
-            byte[] bytess = new byte[1024];
+            
+            byte[] bytes = new byte[1024];
             int numRead = 0;
-
-            while ((numRead = in.read(bytess, 0, bytess.length)) >= 0)
+            
+            while ((numRead = in.read(bytes, 0, bytes.length)) >= 0)                
             {
-                bytesOut.write(bytess, 0, numRead);
+                bytesOut.write(bytes, 0, numRead);
             }
 
             return bytesOut.toByteArray();
         }
     }
+    
+ // TODO remove singleton pattern and make this referenced from lesson
+  
+    public static ImageRepository getInstance() 
+    {
+        if (m_instance == null)
+            m_instance = new ImageRepository();
 
-
-
+        return m_instance;
+    }
+    
     public Set<String> getKeys()
     {
-        return imageMap.keySet();
+        return m_imageMap.keySet();
     }
-
-    public Collection<ImageItem> getImageItems() {
-        return Collections.unmodifiableCollection(imageMap.values());
+    
+    public Collection<ImageItem> getImageItems() // TODO dont give imageItem to outside
+    {
+        return m_imageMap.values();
     }
-
+    
     public ImageIcon getImage(String imageId)
     {
-        for (ImageIcon icon : imageCache)
+        for (ImageIcon icon : m_imageCache)
         {
             if (equals(icon, imageId))
             {
-                imageCache.remove(icon);
-                imageCache.addFirst(icon);
-
+                m_imageCache.remove(icon);
+                m_imageCache.addFirst(icon);
+                
                 return icon;
             }
         }
-
-        ImageItem imageItem = imageMap.get(imageId);
-
+        
+        ImageItem imageItem = m_imageMap.get(imageId);
+        
         if (imageItem == null)
             return null;
-
+        
         ImageIcon icon = imageItem.getImage();
-        imageCache.addFirst(icon);
-
-        if (imageCache.size() > MAX_CACHED_IMAGES) // HACK check for memory usage instead
-            imageCache.removeLast();
-
+        m_imageCache.addFirst(icon);
+        
+        if (m_imageCache.size() > MAX_CACHED_IMAGES) // HACK check for memory usage instead
+            m_imageCache.removeLast();
+        
         return icon;
     }
-
+    
     public String addImage(InputStream in, String filename) throws IOException
     {
+        // TOOD check if image already in our map
+//        for (ImageItem item : m_imageMap.values())
+//        {
+//            if (item.getFile().equals(filename))
+//                return item.getId();
+//        }
+        
         ImageItem item = new ImageItem(in, filename);
         String id = item.getId();
-        imageMap.put(id, item);
-
+        m_imageMap.put(id, item);
+        
         return id;
     }
-
-    public String addImage(ImageIcon icon) throws IOException {
+    
+    public String addImage(ImageIcon icon) throws IOException
+    {
         String description = icon.getDescription();
-
+        
         String id = "";
-        if (description.startsWith(IMG_ID_PREFIX)) {
+        if (description.startsWith(IMG_ID_PREFIX))
+        {
             id = description.substring(IMG_ID_PREFIX.length());
-        } else {
+        }
+        else
+        {
+            InputStream in;
             String name = "";
-
-            // Extract file name directly from description
-            name = new File(description).getName();
-            InputStream in = new FileInputStream(description);
-
-            id = addImage(in, name); // Call the addImage method with InputStream and file name
+            
+            try
+            {
+                URL url = new URL(description);
+                name = new File(url.getPath()).getName();
+                in = url.openStream();
+            }
+            catch (MalformedURLException ex)
+            {
+                name = new File(description).getName();
+                in = new FileInputStream(description);
+                
+                // fallthrough expected
+            }
+            
+            id = addImage(in, name);
             icon.setDescription(IMG_ID_PREFIX + id);
         }
-
+        
         return id;
     }
-
+    
     /**
      * Converts the given list of image icons into a list of image IDs. This is
      * done by using the description field of ImageIcon. If the image icon was
@@ -212,7 +241,7 @@ public class ImageRepository
      */
     public List<String> addImages(List<ImageIcon> images)
     {
-        List<String> imageIDs = new LinkedList<>();
+        List<String> imageIDs = new LinkedList<String>();
         for (ImageIcon icon : images)
         {
             try
@@ -224,45 +253,45 @@ public class ImageRepository
                 Main.logThrowable("could not convert image to image-id", e);
             }
         }
-
+        
         return imageIDs;
     }
-
+    
     /**
      * Retains all images with given IDs. All other images are removed.
      */
     public void retain(Set<String> retainIDs)
     {
-        Set<String> toBeRemoved = new HashSet<>(imageMap.keySet());
-
+        Set<String> toBeRemoved = new HashSet<String>(m_imageMap.keySet());
+        
         for (String id : retainIDs)
             toBeRemoved.remove(id);
-
+        
         for (String id : toBeRemoved)
-            imageMap.remove(id);
+            m_imageMap.remove(id);
     }
-
+    
     public static boolean equals(ImageIcon image, String id)
     {
         String description = image.getDescription();
-        return (description.startsWith(IMG_ID_PREFIX) &&
-                description.substring(IMG_ID_PREFIX.length()).equals(id));
+        return (description.startsWith(IMG_ID_PREFIX) && 
+            description.substring(IMG_ID_PREFIX.length()).equals(id));
     }
-
+    
     public static boolean equals(List<ImageIcon> images, List<String> ids)
     {
         if (images.size() != ids.size())
             return false;
-
+        
         for (ImageIcon icon : images)
         {
             String id = "";
             String description = icon.getDescription();
-
+            
             if (description.startsWith(IMG_ID_PREFIX))
             {
                 id = description.substring(IMG_ID_PREFIX.length());
-
+                
                 if (!ids.contains(id))
                     return false;
             }
@@ -271,34 +300,33 @@ public class ImageRepository
                 return false;
             }
         }
-
+        
         return true;
     }
-
+    
     public List<ImageIcon> toImageIcons(List<String> ids)
     {
-        List<ImageIcon> images = new LinkedList<>();
-
+        List<ImageIcon> images = new LinkedList<ImageIcon>();
+        
         if (ids == null)
             return images;
-
+        
         for (String id : ids)
         {
             ImageIcon image = getImage(id);
             if (image != null)
                 images.add(image);
         }
-
+        
         return images;
     }
-
+    
     public void clear()
     {
-        imageMap.clear();
+        m_imageMap.clear();        
     }
-
-    public ImageRepository() // singleton
-    {
-        //
+    
+    private ImageRepository() // singleton
+    {        
     }
 }

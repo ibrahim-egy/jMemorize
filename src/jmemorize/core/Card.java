@@ -1,7 +1,7 @@
 /*
  * jMemorize - Learning made easy (and fun) - A Leitner flashcards tool
  * Copyright(C) 2004-2008 Riad Djemili and contributors
- *
+ * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 1, or (at your option)
@@ -22,39 +22,37 @@ import java.util.Date;
 import java.util.List;
 
 import jmemorize.core.CardSide.CardSideObserver;
-import jmemorize.core.Category.EventsType;
 
 /**
  * A flash card that has a front/flip side and can be learned.
- *
+ * 
  * @author djemili
  * @version $Id: Card.java 1048 2008-01-21 21:40:00Z djemili $
  */
-public class Card
+public class Card implements Events, Cloneable
 {
-    public static final long    ONE_DAY     =(long) 1000 * 60 * 60 * 24;
+    public static final long    ONE_DAY     = 1000 * 60 * 60 * 24;
     public static final boolean CLONE_DATES = Main.isDevel();
 
-    private Category mCategory;
-    private int mLevel;
+    private Category m_category;
+    private int      m_level;
 
     // content
-    private CardSide mFrontSide;
-    private CardSide mBackSide;
-
+    private CardSide m_frontSide = new CardSide();
+    private CardSide m_backSide  = new CardSide();
+    
     // dates
-    private Date mDateTested;
-    private Date mDateExpired;
-    private Date mDateCreated;
-    private Date mDateModified;
-    private Date mDateTouched; //this date is used internaly to order cards
+    private Date     m_dateTested;
+    private Date     m_dateExpired;
+    private Date     m_dateCreated;
+    private Date     m_dateModified;
+    private Date     m_dateTouched; //this date is used internaly to order cards
 
     // stats
-    private int mTestsTotal;
-    private int mTestsHit;    //succesfull learn repetitions
-    FireCardHelp fireCard;
-
-
+    private int      m_testsTotal;
+    private int      m_testsHit;    //succesfull learn repetitions
+    private int      m_frontHitsCorrect;
+    private int      m_backHitsCorrect;
 
     /**
      * Assumes formatted front- and backsides
@@ -63,12 +61,12 @@ public class Card
     {
         this(FormattedText.formatted(front), FormattedText.formatted(back));
     }
-
-    public Card(FormattedText front, FormattedText back)
+    
+    public Card(FormattedText front, FormattedText back) 
     {
         this(new Date(), front, back);
     }
-
+    
     /**
      * The card sides are given in a formatted state.
      */
@@ -76,92 +74,118 @@ public class Card
     {
         this(created, FormattedText.formatted(front), FormattedText.formatted(back));
     }
-
+    
     public Card(Date created, FormattedText front, FormattedText back)
     {
         this(created, new CardSide(front), new CardSide(back));
     }
-
+    
     public Card(Date created, CardSide frontSide, CardSide backSide)
     {
-        fireCard = new FireCardHelp();
+        m_dateCreated = cloneDate(created);
+        m_dateModified = cloneDate(created);
+        m_dateTouched = cloneDate(created);
 
-        mDateCreated = cloneDate(created);
-        mDateModified = cloneDate(created);
-        mDateTouched = cloneDate(created);
-
-        mFrontSide = frontSide;
-        mBackSide = backSide;
-
+        m_frontSide = frontSide;
+        m_backSide = backSide;
+        
         attachCardSideObservers();
     }
 
     /**
      * The given card sides are assumend to be unformatted.
-     *
+     * 
      * @throws IllegalArgumentException If frontSide or backSide has no text.
      */
     public void setSides(String front, String back)
     {
         FormattedText frontSide = FormattedText.unformatted(front);
         FormattedText backSide = FormattedText.unformatted(back);
-
+        
         setSides(frontSide, backSide);
     }
-
+    
     /**
      * @throws IllegalArgumentException If front or back has no text.
      */
-    public void setSides(FormattedText front, FormattedText back)
-            throws IllegalArgumentException
+    public void setSides(FormattedText front, FormattedText back) 
+        throws IllegalArgumentException
     {
-        if (front.equals(mFrontSide.getText()) &&
-                back.equals(mBackSide.getText()))
+        if (front.equals(m_frontSide.getText()) && 
+            back.equals(m_backSide.getText()))
         {
             return;
         }
-
-        mFrontSide.setText(front);
-        mBackSide.setText(back);
-
-        if (mCategory != null)
+        
+        m_frontSide.setText(front);
+        m_backSide.setText(back);
+        
+        if (m_category != null)
         {
-            mDateModified = new Date();
-            fireCard.fireEvent(Card.this);
+            m_dateModified = new Date();
+            m_category.fireCardEvent(EDITED_EVENT, this, getCategory(), m_level);
         }
     }
-
+    
     /**
      * Get the number of times a specific card side was already learned in its
      * deck.
-     *
+     * 
      * @param frontside <code>true</code> if it should deliver the fronside
      * value, <code>false</code> if it should deliver the backside value.
-     *
+     * 
      * @return the amount of times that the specified side was learned in this
      * deck.
      */
-
+    public int getLearnedAmount(boolean frontside)
+    {
+        // TODO move to CardSide class
+        
+        return frontside ? m_frontHitsCorrect :  m_backHitsCorrect;
+    }
 
     /**
      * Set the number of times a specific card side was already learned in its
      * deck.
-     *
+     * 
      * @param frontside <code>true</code> if it should deliver the fronside
      * value, <code>false</code> if it should deliver the backside value.
-     *
+     * 
      * @param amount the amount of times that the specified side was learned in
      * this deck.
      */
+    public void setLearnedAmount(boolean frontside, int amount)
+    {
+//      TODO move to CardSide class
+        
+        if (frontside)
+        {
+            m_frontHitsCorrect = amount;
+        }
+        else
+        {
+            m_backHitsCorrect = amount;
+        }
+
+        if (m_category != null)
+        {
+            m_category.fireCardEvent(DECK_EVENT, this, getCategory(), m_level);
+        }
+    }
 
     /**
      * Increment the number of times a specific card side was already learned in
      * its deck by one.
-     *
+     * 
      * @param frontside <code>true</code> if it should deliver the fronside
      * value, <code>false</code> if it should deliver the backside value.
      */
-
+    public void incrementLearnedAmount(boolean frontside)
+    {
+//      TODO move to CardSide class
+        
+        setLearnedAmount(frontside, getLearnedAmount(frontside) + 1);
+    }
 
     /**
      * Resets the amount of times that the card sides were learned in this deck
@@ -169,33 +193,33 @@ public class Card
      */
     public void resetLearnedAmount()
     {
-        getFrontSide().setLearnedAmount(0,Card.this);
-        getBackSide().setLearnedAmount(0,Card.this);
+        setLearnedAmount(true, 0);
+        setLearnedAmount(false, 0);
     }
 
     public CardSide getFrontSide()
     {
-        return mFrontSide;
+        return m_frontSide;
     }
 
     public CardSide getBackSide()
     {
-        return mBackSide;
+        return m_backSide;
     }
-
+    
     /**
      * @return the date that this card appeared the last time in a test and was
      * either passed or failed (skip doesn't count).
      */
     public Date getDateTested()
     {
-        return cloneDate(mDateTested);
+        return cloneDate(m_dateTested);
     }
 
     public void setDateTested(Date date)
     {
-        mDateTested = cloneDate(date);
-        mDateTouched = cloneDate(date);
+        m_dateTested = cloneDate(date);
+        m_dateTouched = cloneDate(date);
     }
 
     /**
@@ -203,7 +227,7 @@ public class Card
      */
     public Date getDateExpired()
     {
-        return cloneDate(mDateExpired);
+        return cloneDate(m_dateExpired);
     }
 
     /**
@@ -211,7 +235,7 @@ public class Card
      */
     public void setDateExpired(Date date) // CHECK should this throw a event?
     {
-        mDateExpired = cloneDate(date);
+        m_dateExpired = cloneDate(date);
     }
 
     /**
@@ -219,23 +243,23 @@ public class Card
      */
     public Date getDateCreated()
     {
-        return cloneDate(mDateCreated);
+        return cloneDate(m_dateCreated);
     }
 
     public void setDateCreated(Date date)
     {
-        if (date == null)
+        if (date == null) 
             throw new NullPointerException();
-
-        mDateCreated = cloneDate(date);
+        
+        m_dateCreated = cloneDate(date);
     }
-
+    
     /**
      * @return the modification date. Is never <code>null</code>.
      */
     public Date getDateModified()
     {
-        return mDateModified;
+        return m_dateModified;
     }
 
     /**
@@ -243,11 +267,11 @@ public class Card
      */
     public void setDateModified(Date date)
     {
-        if (date.before(mDateCreated))
+        if (date.before(m_dateCreated))
             throw new IllegalArgumentException(
-                    "Modification date can't be before creation date.");
-
-        mDateModified = date;
+                "Modification date can't be before creation date.");
+        
+        m_dateModified = date;
     }
 
     /**
@@ -257,12 +281,12 @@ public class Card
      */
     public Date getDateTouched()
     {
-        return cloneDate(mDateTouched);
+        return cloneDate(m_dateTouched);
     }
 
     public void setDateTouched(Date date)
     {
-        mDateTouched = cloneDate(date);
+        m_dateTouched = cloneDate(date);
     }
 
     /**
@@ -270,7 +294,7 @@ public class Card
      */
     public int getTestsTotal()
     {
-        return mTestsTotal;
+        return m_testsTotal;
     }
 
     /**
@@ -278,7 +302,7 @@ public class Card
      */
     public int getTestsPassed()
     {
-        return mTestsHit;
+        return m_testsHit;
     }
 
     /**
@@ -287,67 +311,67 @@ public class Card
      */
     public int getPassRatio()
     {
-        return (int)Math.round(100.0 * mTestsHit / mTestsTotal);
+        return (int)Math.round(100.0 * m_testsHit / m_testsTotal);
     }
 
     public void incStats(int hit, int total)
     {
-        mTestsTotal += total;
-        mTestsHit += hit;
+        m_testsTotal += total;
+        m_testsHit += hit;
     }
 
     public void resetStats()
     {
-        mTestsTotal = 0;
-        mTestsHit = 0;
-
-        mFrontSide.setLearnedAmount(0,Card.this);
-        mBackSide.setLearnedAmount(0,Card.this);
+        m_testsTotal = 0;
+        m_testsHit = 0;
+        
+        m_frontHitsCorrect = 0;
+        m_backHitsCorrect = 0;
     }
 
     public Category getCategory()
     {
-        return mCategory;
+        return m_category;
     }
 
     protected void setCategory(Category category)
     {
-        mCategory = category;
+        m_category = category;
     }
 
     /**
      * A card is expired when it was learned/repeated succesfully, but its learn
      * time has expired (is in the past from current perspective).
-     *
+     * 
      * @return True if the card has expired.
      */
     public boolean isExpired()
     {
         Date now = Main.getNow();
-        return mDateExpired != null &&
-                (mDateExpired.before(now) || mDateExpired.equals(now));
+        return m_dateExpired != null && 
+            (m_dateExpired.before(now) || m_dateExpired.equals(now));
     }
 
     /**
-     * A card is learned when it was learned/repeated succesfully and its learn
+     * A card is learned when it was learned/repeated succesfully and its learn 
      * time hasnt expired.
-     *
+     * 
      * @return True if the card is learned.
      */
     public boolean isLearned()
     {
-        return mDateExpired != null && mDateExpired.after(Main.getNow());
+        return m_dateExpired != null && m_dateExpired.after(Main.getNow());
     }
 
     /**
      * A card is unlearned when it wasnt succesfully repeated or never been l
      * earned at all.
-     *
+     * 
      * @return True if the card is unlearned.
      */
     public boolean isUnlearned()
     {
-        return mDateExpired == null;
+        return m_dateExpired == null;
     }
 
     /**
@@ -355,7 +379,7 @@ public class Card
      */
     public int getLevel()
     {
-        return mLevel;
+        return m_level;
     }
 
     /**
@@ -363,48 +387,55 @@ public class Card
      */
     protected void setLevel(int level)
     {
-        mLevel = level;
+        m_level = level;
     }
 
     /* (non-Javadoc)
      * @see java.lang.Object#clone()
      */
-
-
-
-    public Card(Card original) {
-        this.mCategory = original.mCategory;
-        this.mLevel = original.mLevel;
-
-        this.mFrontSide = new CardSide(original.getFrontSide());
-        this.mBackSide = new CardSide(original.getBackSide());
-
-        this.mDateCreated = cloneDate(original.mDateCreated);
-        this.mDateExpired = cloneDate(original.mDateExpired);
-        this.mDateModified = cloneDate(original.mDateModified);
-        this.mDateTested = cloneDate(original.mDateTested);
-        this.mDateTouched = cloneDate(original.mDateTouched);
-
-        this.mTestsTotal = original.mTestsTotal;
-        this.mTestsHit = original.mTestsHit;
-
-        this.mCategory = null;
-
-        this.fireCard = original.fireCard;
-
-        attachCardSideObservers();
+    public Object clone()
+    {
+        Card card = null;
+        try
+        {
+            card = (Card)super.clone();
+            card.m_frontSide = (CardSide)m_frontSide.clone();
+            card.m_backSide = (CardSide)m_backSide.clone();
+            
+            card.m_dateCreated = cloneDate(m_dateCreated);
+            card.m_dateExpired = cloneDate(m_dateExpired);
+            card.m_dateModified = cloneDate(m_dateModified);
+            card.m_dateTested = cloneDate(m_dateTested);
+            card.m_dateTouched = cloneDate(m_dateTouched);
+            
+            card.m_category = null; // don't clone category
+        }
+        catch (CloneNotSupportedException e) 
+        {
+            assert false;
+        }
+        
+        return card;
     }
-
-
+    
     /**
      * Clones the card without copying its user-dependent progress stats.
-     *
+     * 
      * This includes the following data: Fronside, Flipside, Creation date.
      * Setting the right category needs to be handled from the out side.
      */
-
-    public Card cloneWithoutProgress() {
-        return new Card(mDateCreated, new CardSide(mFrontSide), new CardSide(mBackSide));
+    public Card cloneWithoutProgress()
+    {
+        try
+        {
+            return new Card(m_dateCreated, 
+                (CardSide)m_frontSide.clone(), (CardSide)m_backSide.clone());
+        }
+        catch (CloneNotSupportedException e)
+        {
+            assert false;
+            return null; // satisfy compiler
+        }
     }
 
     /**
@@ -412,32 +443,30 @@ public class Card
      */
     public String toString()
     {
-        return "("+ mFrontSide +"/"+ mBackSide +")";
+        return "("+m_frontSide+"/"+m_backSide+")";
     }
-
+    
     private void attachCardSideObservers()
     {
         CardSideObserver observer = new CardSideObserver() {
             public void onImagesChanged(CardSide cardSide, List<String> imageIDs)
             {
-                if (mCategory != null) {
-                    mDateModified = new Date();
+                if (m_category != null)
+                {
+                    m_dateModified = new Date();
+                    m_category.fireCardEvent(EDITED_EVENT, Card.this, getCategory(), m_level);
                 }
-                fireCard.fireEvent(Card.this);
-
             }
+
             public void onTextChanged(CardSide cardSide, FormattedText text)
             {
                 // already handled by set sides
-                if (mCategory != null) {
-                    mDateModified = new Date();
-                }
-                fireCard.fireEvent(Card.this);
+                // TODO handle event notfying here
             }
         };
-
-        mFrontSide.addObserver(observer);
-        mBackSide.addObserver(observer);
+        
+        m_frontSide.addObserver(observer);
+        m_backSide.addObserver(observer);
     }
 
     /**
@@ -450,6 +479,7 @@ public class Card
         {
             return date == null ? null : (Date)date.clone();
         }
+        
         return date;
     }
 }
