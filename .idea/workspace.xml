@@ -2,76 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="13ce31f9-4c19-4f91-a991-e042ed8d4e68" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/jMemorize_1_3_0.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/lib.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/0/2/0246484cd172315d68d9f31e358fa8216f03ad15" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/0/d/0d338dfd2755a0512d4d243d8680c28bda079aed" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/1/9/193b3ae25de434658a4cf27a0f8ff1b51b55c917" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/8/388afc13467aeb7a069302bfd6cc527e58f2432f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/a/3a8f7a91c72f762e921dfbfbb366e014d5e036aa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/3/c/3c09cbf96b9b3be8ebc2bd82a85f564bb258901a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/5/458ddb712e4fd6681ab53f103553ceb4f565f62b" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/6/46b2b1e97cdd3e79f9089bda6753c0711a9e7d35" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/c/4ce2f119d5a5c3f8e64b76b2ad279b046a1d64fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/5/2/5240758257f1ed76fb3e7dd180f38daf5648e9ac" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/5/4/54190f2e266dcba9a37a2f34efc5629aad4efaa1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/5/8/5847cef72ee910b4f50e1d0d71e2328862679f6e" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/9/7/97e7622ca206eb6f36624eeda2ceb073baa082d6" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/a/b/ab8e64f82366190056c66dcf4bfe4fc4342b9fcf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/5/b5b9274b5dc6ddb774103a78a1a865f7a670d526" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/7/b79817ce84d43cb3143d5887c490c98da970041f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/c/a/caab127031c0480e8015cd6533d4b64e0c0fb2fe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/0/e0125022dc09c660aafc07a7948c7339e74c7849" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/e/c/ecd6d3be20d2e9474b256a91014141d3b35fdc33" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/0/f0e6d86748425db7547fc8ff2155e79f3e3a0004" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/8/f8d3932f443600ca834c806c6a4feddde83caca8" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/0/2/0246484cd172315d68d9f31e358fa8216f03ad15" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/0/d/0d338dfd2755a0512d4d243d8680c28bda079aed" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/1/9/193b3ae25de434658a4cf27a0f8ff1b51b55c917" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/3/8/388afc13467aeb7a069302bfd6cc527e58f2432f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/3/a/3a8f7a91c72f762e921dfbfbb366e014d5e036aa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/3/c/3c09cbf96b9b3be8ebc2bd82a85f564bb258901a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/4/5/458ddb712e4fd6681ab53f103553ceb4f565f62b" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/4/6/46b2b1e97cdd3e79f9089bda6753c0711a9e7d35" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/4/c/4ce2f119d5a5c3f8e64b76b2ad279b046a1d64fa" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/5/2/5240758257f1ed76fb3e7dd180f38daf5648e9ac" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/5/4/54190f2e266dcba9a37a2f34efc5629aad4efaa1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/5/8/5847cef72ee910b4f50e1d0d71e2328862679f6e" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/9/7/97e7622ca206eb6f36624eeda2ceb073baa082d6" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/a/b/ab8e64f82366190056c66dcf4bfe4fc4342b9fcf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/b/5/b5b9274b5dc6ddb774103a78a1a865f7a670d526" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/b/7/b79817ce84d43cb3143d5887c490c98da970041f" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/c/a/caab127031c0480e8015cd6533d4b64e0c0fb2fe" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/e/0/e0125022dc09c660aafc07a7948c7339e74c7849" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/e/c/ecd6d3be20d2e9474b256a91014141d3b35fdc33" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/f/0/f0e6d86748425db7547fc8ff2155e79f3e3a0004" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/f/8/f8d3932f443600ca834c806c6a4feddde83caca8" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/securityhotspotstore/index.pb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jMemorize.iml" beforeDir="false" afterPath="$PROJECT_DIR$/jMemorize.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/core/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/core/Card.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/core/CardSide.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/core/CardSide.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/core/Category.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/core/Category.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/core/CategoryObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/core/CategoryObserver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/core/Events.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/core/Events.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/core/FireCardHelp.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/core/FormattedText.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/core/FormattedText.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/core/ImageRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/core/ImageRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/core/Lesson.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/core/Lesson.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/jmemorize/core/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/core/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/core/SearchTool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/core/SearchTool.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/core/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/core/Settings.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/core/io/XmlBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/core/io/XmlBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/core/learn/DefaultLearnSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/core/learn/DefaultLearnSession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/core/test/CardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/core/test/CardTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/core/test/CategoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/core/test/CategoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/core/test/FormattedTextTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/core/test/FormattedTextTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/gui/Localization.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/gui/Localization.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/gui/swing/GeneralTransferHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/gui/swing/GeneralTransferHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/gui/swing/panels/CardCounterPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/gui/swing/panels/CardCounterPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/gui/swing/panels/CardSidePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/gui/swing/panels/CardSidePanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jmemorize/gui/swing/panels/LearnPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/jmemorize/gui/swing/panels/LearnPanel.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,17 +20,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Users/ibrah/Desktop/jMemorize-1.3.0.jar",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/ibrah/Desktop/jMemorize-1.3.0.jar&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
